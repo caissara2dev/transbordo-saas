@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signInAction } from "@/lib/auth/actions";
 import { getSessionResolution } from "@/lib/auth/session";
+import { isDemoModeEnabled } from "@/lib/demo";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/panel";
@@ -39,6 +40,7 @@ export default async function LoginPage({
   const params = (await searchParams) ?? {};
   const errorMessage = resolveErrorMessage(params.error);
   const isConfigured = session.state !== "unconfigured";
+  const demoMode = isDemoModeEnabled();
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-12">
@@ -62,6 +64,12 @@ export default async function LoginPage({
           </div>
         ) : null}
 
+        {demoMode ? (
+          <div className="rounded-[1.8rem] border border-emerald-500/20 bg-emerald-50 px-5 py-4 text-sm leading-7 text-emerald-900">
+            Local demo mode is enabled. You can open the protected workspace without Supabase or database data.
+          </div>
+        ) : null}
+
         {errorMessage ? (
           <div className="rounded-[1.8rem] border border-rose-500/20 bg-rose-50 px-5 py-4 text-sm leading-7 text-rose-900">
             {errorMessage}
@@ -81,6 +89,12 @@ export default async function LoginPage({
             Continue
           </Button>
         </form>
+
+        {demoMode ? (
+          <Button asChild className="w-full" size="lg" variant="secondary">
+            <Link href="/dashboard">Enter demo workspace</Link>
+          </Button>
+        ) : null}
 
         <div className="flex items-center justify-between border-t border-ink-900/10 pt-6 text-sm text-ink-700">
           <Link className="font-medium text-ink-950 underline-offset-4 hover:underline" href="/">

@@ -32,6 +32,7 @@ export type ViewerMembership = {
 };
 
 export type ViewerContext = {
+  isDemo: boolean;
   authUser: {
     id: string;
     email: string;

@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { isDemoModeEnabled } from "@/lib/demo";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 function readValue(formData: FormData, key: string) {
@@ -30,6 +31,10 @@ export async function signInAction(formData: FormData) {
 }
 
 export async function signOutAction() {
+  if (isDemoModeEnabled()) {
+    redirect("/login?demo=1");
+  }
+
   const supabase = await getSupabaseServerClient();
   await supabase.auth.signOut();
   redirect("/login");

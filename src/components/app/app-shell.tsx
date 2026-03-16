@@ -27,8 +27,8 @@ const navItems = [
     visible: () => true
   },
   {
-    href: "/operations",
-    label: "Operations",
+    href: "/lancamentos",
+    label: "Lancamentos",
     icon: ClipboardList,
     visible: () => true
   },
@@ -77,6 +77,7 @@ export function AppShell({
   const timezone = viewer.activeMembership.settings?.timezone ?? "America/Sao_Paulo";
   const approvalContact = viewer.activeMembership.settings?.approvalContactPhone ?? "Not configured yet";
   const displayName = viewer.profile.fullName || viewer.profile.email;
+  const signOutLabel = viewer.isDemo ? "Exit demo" : "Sign out";
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(214,105,45,0.12),_transparent_26%),linear-gradient(180deg,_#f7f4ef_0%,_#eef3f4_100%)]">
@@ -99,6 +100,11 @@ export function AppShell({
               <span className="rounded-full border border-white/12 bg-white/8 px-3 py-2 text-white/60">
                 {platformRoleLabels[viewer.profile.platformRole]}
               </span>
+              {viewer.isDemo ? (
+                <span className="rounded-full border border-amber-200/25 bg-amber-300/15 px-3 py-2 text-amber-100">
+                  Demo mode
+                </span>
+              ) : null}
             </div>
           </div>
           <nav className="mt-8 space-y-2">
@@ -175,11 +181,12 @@ export function AppShell({
                 <p className="text-ink-600">
                   {organizationRoleLabels[role]} at {viewer.activeMembership.organization.name}
                 </p>
+                {viewer.isDemo ? <p className="mt-1 text-xs uppercase tracking-[0.18em] text-amber-700">Local demo workspace</p> : null}
               </div>
               <form action={signOutAction}>
                 <Button size="sm" type="submit" variant="ghost">
                   <LogOut className="h-4 w-4" />
-                  Sign out
+                  {signOutLabel}
                 </Button>
               </form>
             </div>

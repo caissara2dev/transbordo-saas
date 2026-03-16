@@ -8,6 +8,13 @@ import {
   organizationMemberships,
   userProfiles
 } from "@/lib/db/schema";
+import {
+  getDemoClients,
+  getDemoGovernanceSnapshot,
+  getDemoTeam,
+  getDemoWorkspaceDashboardSnapshot,
+  isDemoModeEnabled
+} from "@/lib/demo";
 
 function formatDateInput(date: Date) {
   return date.toISOString().slice(0, 10);
@@ -20,6 +27,10 @@ function subtractDays(date: Date, days: number) {
 }
 
 export async function getWorkspaceDashboardSnapshot(organizationId: string) {
+  if (isDemoModeEnabled()) {
+    return getDemoWorkspaceDashboardSnapshot();
+  }
+
   const db = getDb();
   const since = formatDateInput(subtractDays(new Date(), 30));
 
@@ -69,6 +80,10 @@ export async function getWorkspaceDashboardSnapshot(organizationId: string) {
 }
 
 export async function getOrganizationClients(organizationId: string) {
+  if (isDemoModeEnabled()) {
+    return getDemoClients();
+  }
+
   const db = getDb();
   return db
     .select({
@@ -83,6 +98,10 @@ export async function getOrganizationClients(organizationId: string) {
 }
 
 export async function getOrganizationTeam(organizationId: string) {
+  if (isDemoModeEnabled()) {
+    return getDemoTeam();
+  }
+
   const db = getDb();
   const [memberships, invitations] = await Promise.all([
     db
@@ -116,6 +135,10 @@ export async function getOrganizationTeam(organizationId: string) {
 }
 
 export async function getGovernanceSnapshot(organizationId: string) {
+  if (isDemoModeEnabled()) {
+    return getDemoGovernanceSnapshot();
+  }
+
   const db = getDb();
   const [[eventsRow], [deletedRow], [revisionsRow], recentRevisions] = await Promise.all([
     db.select({ value: count() }).from(events).where(eq(events.organizationId, organizationId)),

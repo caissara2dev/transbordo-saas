@@ -25,3 +25,13 @@ npm install
 cp .env.example .env.local
 npm run dev
 ```
+
+## Local demo mode
+
+If you want to inspect the protected workspace without wiring Supabase or Postgres yet, enable:
+
+```bash
+APP_DEMO_MODE=true
+```
+
+Then open `/dashboard` or use the demo entry point on `/login`.

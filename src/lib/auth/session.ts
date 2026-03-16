@@ -9,6 +9,7 @@ import {
   userProfiles
 } from "@/lib/db/schema";
 import { getOptionalSupabaseServerClient } from "@/lib/supabase/server";
+import { getDemoSessionResolution, isDemoModeEnabled } from "@/lib/demo";
 import type { SessionResolution, ViewerContext, ViewerProfile, WorkspaceViewer } from "@/types/app";
 
 function readFullName(metadata: unknown) {
@@ -63,6 +64,10 @@ async function syncViewerProfile(userId: string, email: string, fullName: string
 
 export async function getSessionResolution(): Promise<SessionResolution> {
   noStore();
+
+  if (isDemoModeEnabled()) {
+    return getDemoSessionResolution();
+  }
 
   const supabase = await getOptionalSupabaseServerClient();
   if (!supabase) {
@@ -127,6 +132,7 @@ export async function getSessionResolution(): Promise<SessionResolution> {
   return {
     state: "authenticated",
     viewer: {
+      isDemo: false,
       authUser: {
         id: user.id,
         email: user.email
