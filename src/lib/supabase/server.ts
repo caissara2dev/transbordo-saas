@@ -6,15 +6,24 @@ function getConfig() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Supabase public environment variables are missing.");
+    return null;
   }
 
   return { url, key };
 }
 
-export async function getSupabaseServerClient() {
+export function isSupabaseConfigured() {
+  return Boolean(getConfig());
+}
+
+export async function getOptionalSupabaseServerClient() {
+  const config = getConfig();
+  if (!config) {
+    return null;
+  }
+
   const cookieStore = await cookies();
-  const { url, key } = getConfig();
+  const { url, key } = config;
 
   return createServerClient(url, key, {
     cookies: {
@@ -32,4 +41,13 @@ export async function getSupabaseServerClient() {
       }
     }
   });
+}
+
+export async function getSupabaseServerClient() {
+  const client = await getOptionalSupabaseServerClient();
+  if (!client) {
+    throw new Error("Supabase public environment variables are missing.");
+  }
+
+  return client;
 }

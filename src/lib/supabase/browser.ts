@@ -10,15 +10,20 @@ function getConfig() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Supabase public environment variables are missing.");
+    return null;
   }
 
   return { url, key };
 }
 
 export function getSupabaseBrowserClient() {
+  const config = getConfig();
+  if (!config) {
+    return null;
+  }
+
   if (!browserClient) {
-    const { url, key } = getConfig();
+    const { url, key } = config;
     browserClient = createBrowserClient(url, key);
   }
 
