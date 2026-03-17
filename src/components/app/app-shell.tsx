@@ -88,12 +88,14 @@ export function AppShell({
   currentPath,
   title,
   description,
+  showPageHeader = true,
   children
 }: {
   viewer: WorkspaceViewer;
   currentPath: string;
   title: string;
   description: string;
+  showPageHeader?: boolean;
   children: ReactNode;
 }) {
   const role = viewer.activeMembership.role;
@@ -303,28 +305,30 @@ export function AppShell({
       </header>
 
       <main className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <header className="mb-6 rounded-[28px] border border-black/10 bg-white p-6 shadow-panel">
-          <div className="mb-3 flex items-center gap-3">
-            <div className="h-px w-8 bg-ember-500" />
-            <p className="text-[10px] uppercase tracking-[0.32em] text-ember-500">Workspace ativo</p>
-          </div>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-3">
-              <h2 className="font-display text-4xl leading-none text-ink-950 sm:text-5xl">{title}</h2>
-              <p className="max-w-3xl text-sm leading-6 text-ink-700 sm:text-base">{description}</p>
+        {showPageHeader ? (
+          <header className="mb-6 rounded-[28px] border border-black/10 bg-white p-6 shadow-panel">
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-px w-8 bg-ember-500" />
+              <p className="text-[10px] uppercase tracking-[0.32em] text-ember-500">Workspace ativo</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-black/10 bg-sand-50 px-3 py-2 text-xs uppercase tracking-[0.18em] text-ink-700">
-                {organizationRoleLabels[role]}
-              </span>
-              {viewer.isDemo ? (
-                <span className="rounded-full border border-gold-500/20 bg-gold-500/10 px-3 py-2 text-xs uppercase tracking-[0.18em] text-gold-700">
-                  Demo mode
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="space-y-3">
+                <h2 className="font-display text-4xl leading-none text-ink-950 sm:text-5xl">{title}</h2>
+                <p className="max-w-3xl text-sm leading-6 text-ink-700 sm:text-base">{description}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-full border border-black/10 bg-sand-50 px-3 py-2 text-xs uppercase tracking-[0.18em] text-ink-700">
+                  {organizationRoleLabels[role]}
                 </span>
-              ) : null}
+                {viewer.isDemo ? (
+                  <span className="rounded-full border border-gold-500/20 bg-gold-500/10 px-3 py-2 text-xs uppercase tracking-[0.18em] text-gold-700">
+                    Demo mode
+                  </span>
+                ) : null}
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
+        ) : null}
 
         <div>{children}</div>
       </main>
