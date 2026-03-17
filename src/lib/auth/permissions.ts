@@ -1,27 +1,27 @@
 import type { InvitationStatus, MembershipStatus, OrganizationRole, PlatformRole } from "@/lib/domain/options";
 
 export const organizationRoleLabels: Record<OrganizationRole, string> = {
-  ORG_ADMIN: "Org Admin",
-  MANAGER: "Manager",
-  OPERATOR: "Operator"
+  ORG_ADMIN: "Admin da org",
+  MANAGER: "Gestor",
+  OPERATOR: "Operador"
 };
 
 export const membershipStatusLabels: Record<MembershipStatus, string> = {
-  ACTIVE: "Active",
-  INVITED: "Invited",
-  SUSPENDED: "Suspended"
+  ACTIVE: "Ativo",
+  INVITED: "Convidado",
+  SUSPENDED: "Suspenso"
 };
 
 export const invitationStatusLabels: Record<InvitationStatus, string> = {
-  ACCEPTED: "Accepted",
-  EXPIRED: "Expired",
-  PENDING: "Pending",
-  REVOKED: "Revoked"
+  ACCEPTED: "Aceito",
+  EXPIRED: "Expirado",
+  PENDING: "Pendente",
+  REVOKED: "Revogado"
 };
 
 export const platformRoleLabels: Record<PlatformRole, string> = {
-  NONE: "Customer User",
-  PLATFORM_ADMIN: "Platform Admin"
+  NONE: "Usuario cliente",
+  PLATFORM_ADMIN: "Admin da plataforma"
 };
 
 export function canManageWorkspace(role: OrganizationRole) {
@@ -30,4 +30,8 @@ export function canManageWorkspace(role: OrganizationRole) {
 
 export function canConfigureWorkspace(role: OrganizationRole) {
   return role === "ORG_ADMIN";
+}
+
+export function canViewReports(role: OrganizationRole) {
+  return canManageWorkspace(role);
 }

@@ -5,8 +5,8 @@ import { canManageWorkspace } from "@/lib/auth/permissions";
 import { requireWorkspaceViewer } from "@/lib/auth/session";
 import { getGovernanceSnapshot } from "@/lib/app/workspace";
 
-const numberFormatter = new Intl.NumberFormat("en-US");
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
+const numberFormatter = new Intl.NumberFormat("pt-BR");
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   dateStyle: "medium",
   timeStyle: "short"
 });
@@ -23,35 +23,35 @@ export default async function GovernancePage() {
     <AppShell
       viewer={viewer}
       currentPath="/governance"
-      title="Governance and audit"
-      description="Auditability is not an afterthought. Revision history, role changes, and event ownership remain explicit product value."
+      title="Governanca e auditoria"
+      description="Camada de rastreabilidade do produto: revisoes, ownership de eventos e evidencias operacionais por organizacao."
     >
       <div className="grid gap-4 lg:grid-cols-[0.95fr_1.05fr]">
         <Panel className="space-y-4">
-          <h3 className="font-display text-3xl text-ink-950">Governed data footprint</h3>
+          <h3 className="font-display text-3xl text-ink-950">Pegada auditavel da operacao</h3>
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-3xl border border-ink-900/10 bg-sand-50/70 p-4">
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Events</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Eventos</p>
               <p className="mt-2 font-display text-4xl leading-none text-ink-950">{numberFormatter.format(snapshot.totalEvents)}</p>
             </div>
             <div className="rounded-3xl border border-ink-900/10 bg-sand-50/70 p-4">
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Deleted</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Excluidos</p>
               <p className="mt-2 font-display text-4xl leading-none text-ink-950">{numberFormatter.format(snapshot.deletedEvents)}</p>
             </div>
             <div className="rounded-3xl border border-ink-900/10 bg-sand-50/70 p-4">
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Revisions</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-500">Revisoes</p>
               <p className="mt-2 font-display text-4xl leading-none text-ink-950">{numberFormatter.format(snapshot.revisions)}</p>
             </div>
           </div>
           <p className="text-sm leading-7 text-ink-700">
-            Soft delete, revision history, and explicit membership ownership remain core product value. The numbers above now come from the live organization scope instead of static mock data.
+            Soft delete, historico de revisoes e ownership explicito continuam sendo valor central do produto. Os numeros acima ja saem do escopo real da organizacao.
           </p>
         </Panel>
         <Panel className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.28em] text-ink-500">Recent revision activity</p>
-          <h3 className="font-display text-4xl leading-none text-ink-950">Governed workflows before configurability.</h3>
+          <p className="text-xs uppercase tracking-[0.28em] text-ink-500">Atividade recente</p>
+          <h3 className="font-display text-4xl leading-none text-ink-950">Fluxos governados antes da hiperconfiguracao.</h3>
           {snapshot.recentRevisions.length === 0 ? (
-            <p className="text-sm leading-7 text-ink-700">No event revisions have been recorded for this organization yet.</p>
+            <p className="text-sm leading-7 text-ink-700">Nenhuma revisao de evento foi registrada para esta organizacao.</p>
           ) : (
             <div className="space-y-3">
               {snapshot.recentRevisions.map((revision) => (
@@ -63,7 +63,7 @@ export default async function GovernancePage() {
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-ink-700">
-                    {revision.changedFields.length > 0 ? revision.changedFields.join(", ") : "Field list pending"}
+                    {revision.changedFields.length > 0 ? revision.changedFields.join(", ") : "Lista de campos pendente"}
                   </p>
                   {revision.reason ? <p className="mt-2 text-sm leading-7 text-ink-700">{revision.reason}</p> : null}
                 </div>

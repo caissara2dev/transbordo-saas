@@ -16,15 +16,15 @@ export default async function SettingsPage() {
     <AppShell
       viewer={viewer}
       currentPath="/settings"
-      title="Organization settings"
-      description="Settings will anchor the manual onboarding flow in v1: organization profile, timezone, and approval contact details."
+      title="Configuracoes"
+      description="Defaults e dados institucionais da organizacao: base de onboarding, timezone operacional e contato de aprovacao."
     >
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel className="space-y-3">
-          <h3 className="font-display text-3xl text-ink-950">Organization profile</h3>
+          <h3 className="font-display text-3xl text-ink-950">Perfil da organizacao</h3>
           <dl className="space-y-3 text-sm leading-7 text-ink-700">
             <div>
-              <dt className="text-ink-500">Name</dt>
+              <dt className="text-ink-500">Nome</dt>
               <dd className="font-medium text-ink-950">{viewer.activeMembership.organization.name}</dd>
             </div>
             <div>
@@ -32,8 +32,8 @@ export default async function SettingsPage() {
               <dd className="font-medium text-ink-950">{viewer.activeMembership.organization.slug}</dd>
             </div>
             <div>
-              <dt className="text-ink-500">Legal name</dt>
-              <dd className="font-medium text-ink-950">{viewer.activeMembership.organization.legalName || "Not set"}</dd>
+              <dt className="text-ink-500">Razao social</dt>
+              <dd className="font-medium text-ink-950">{viewer.activeMembership.organization.legalName || "Nao definido"}</dd>
             </div>
             <div>
               <dt className="text-ink-500">Status</dt>
@@ -42,22 +42,22 @@ export default async function SettingsPage() {
           </dl>
         </Panel>
         <Panel className="space-y-3">
-          <h3 className="font-display text-3xl text-ink-950">Operational defaults</h3>
+          <h3 className="font-display text-3xl text-ink-950">Defaults operacionais</h3>
           <dl className="space-y-3 text-sm leading-7 text-ink-700">
             <div>
               <dt className="text-ink-500">Timezone</dt>
               <dd className="font-medium text-ink-950">{settings?.timezone || "America/Sao_Paulo"}</dd>
             </div>
             <div>
-              <dt className="text-ink-500">Approval contact</dt>
-              <dd className="font-medium text-ink-950">{settings?.approvalContactPhone || "Not configured"}</dd>
+              <dt className="text-ink-500">Contato de aprovacao</dt>
+              <dd className="font-medium text-ink-950">{settings?.approvalContactPhone || "Nao configurado"}</dd>
             </div>
             <div>
-              <dt className="text-ink-500">Operations label</dt>
+              <dt className="text-ink-500">Rotulo operacional</dt>
               <dd className="font-medium text-ink-950">{settings?.operationsLabel || "Transbordo"}</dd>
             </div>
             <div>
-              <dt className="text-ink-500">Platform access</dt>
+              <dt className="text-ink-500">Acesso de plataforma</dt>
               <dd className="font-medium text-ink-950">{platformRoleLabels[viewer.profile.platformRole]}</dd>
             </div>
           </dl>
