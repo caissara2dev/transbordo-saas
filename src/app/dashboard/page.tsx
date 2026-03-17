@@ -71,7 +71,6 @@ export default async function DashboardPage() {
   const viewer = await requireWorkspaceViewer();
   const snapshot = await getWorkspaceDashboardSnapshot(viewer.activeMembership.organization.id);
   const visibleShortcuts = shortcutItems.filter((item) => item.visible(viewer.activeMembership.role));
-  const displayName = viewer.profile.fullName || viewer.profile.email;
   const snapshotCards = [
     {
       label: "Usuarios ativos",
@@ -109,13 +108,6 @@ export default async function DashboardPage() {
             <div className="inline-flex items-center gap-2 rounded border border-black/[0.08] bg-white px-3 py-1.5 shadow-sm">
               <span className="font-body text-[12px] uppercase tracking-wider text-ink-500">Painel de controle</span>
             </div>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="font-display text-[32px] leading-tight tracking-tight text-[#1a1a1f] lg:text-[40px]">Visao geral do turno</h1>
-            <p className="mt-3 font-body text-[15px] text-[#606060]">
-              Bem-vindo(a), {displayName}. Use os atalhos para operar o turno.
-            </p>
           </div>
         </div>
 
