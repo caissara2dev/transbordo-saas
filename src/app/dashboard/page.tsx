@@ -3,31 +3,31 @@ import { Panel } from "@/components/ui/panel";
 import { requireWorkspaceViewer } from "@/lib/auth/session";
 import { getWorkspaceDashboardSnapshot } from "@/lib/app/workspace";
 
-const numberFormatter = new Intl.NumberFormat("en-US");
+const numberFormatter = new Intl.NumberFormat("pt-BR");
 
 export default async function DashboardPage() {
   const viewer = await requireWorkspaceViewer();
   const snapshot = await getWorkspaceDashboardSnapshot(viewer.activeMembership.organization.id);
   const cards = [
     {
-      label: "Active members",
+      label: "Usuarios ativos",
       value: numberFormatter.format(snapshot.activeMembers),
-      note: "Operational seats already active inside this organization."
+      note: "Assentos operacionais ativos nesta organizacao."
     },
     {
-      label: "Pending invites",
+      label: "Convites pendentes",
       value: numberFormatter.format(snapshot.pendingInvites),
-      note: "Invitations waiting for acceptance or manual activation."
+      note: "Convites aguardando aceite ou ativacao manual."
     },
     {
-      label: "Active clients",
+      label: "Clientes ativos",
       value: numberFormatter.format(snapshot.activeClients),
-      note: "Client registry items available for governed productive events."
+      note: "Cadastro disponivel para eventos produtivos governados."
     },
     {
-      label: "Events in 30 days",
+      label: "Eventos em 30 dias",
       value: numberFormatter.format(snapshot.eventsLast30Days),
-      note: `${numberFormatter.format(snapshot.productiveEventsLast30Days)} marked as productive.`
+      note: `${numberFormatter.format(snapshot.productiveEventsLast30Days)} classificados como produtivos.`
     }
   ];
 
@@ -35,14 +35,20 @@ export default async function DashboardPage() {
     <AppShell
       viewer={viewer}
       currentPath="/dashboard"
-      title="Workspace overview"
-      description="This dashboard is now session-aware: it resolves the signed-in user, active organization, and live organization counts from Postgres."
+      title="Painel operacional"
+      description="Visao executiva da organizacao ativa, com contadores, guardrails de implantacao e o primeiro recorte de governanca do produto SaaS."
     >
       <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="grid gap-4 sm:grid-cols-2">
-          {cards.map((card) => (
+          {cards.map((card, index) => (
             <Panel className="space-y-3" key={card.label}>
-              <p className="text-sm text-ink-600">{card.label}</p>
+              <div
+                className="h-px w-12"
+                style={{
+                  backgroundColor: ["#e87b35", "#5b9a6f", "#d4a843", "#6b8fb5"][index]
+                }}
+              />
+              <p className="text-sm uppercase tracking-[0.18em] text-ink-500">{card.label}</p>
               <p className="font-display text-5xl leading-none text-ink-950">{card.value}</p>
               <p className="text-sm leading-6 text-ink-700">{card.note}</p>
             </Panel>
@@ -50,22 +56,25 @@ export default async function DashboardPage() {
         </div>
 
         <Panel className="space-y-5">
-          <p className="text-xs uppercase tracking-[0.28em] text-ink-500">Current organization</p>
+          <div className="flex items-center gap-3">
+            <div className="h-px w-8 bg-ember-500" />
+            <p className="text-xs uppercase tracking-[0.28em] text-ember-500">Organizacao atual</p>
+          </div>
           <h3 className="font-display text-3xl leading-none text-ink-950">{viewer.activeMembership.organization.name}</h3>
           <div className="space-y-4 text-sm leading-7 text-ink-700">
             <p>
-              The active workspace is anchored to <strong>{viewer.activeMembership.organization.slug}</strong> and{" "}
+              O workspace ativo esta ancorado em <strong>{viewer.activeMembership.organization.slug}</strong> e opera em{" "}
               <strong>{viewer.activeMembership.settings?.timezone ?? "America/Sao_Paulo"}</strong>.
             </p>
             <p>
-              The MVP remains intentionally narrow: memberships, clients, event logging, revision history, and reports. Billing and multi-site depth stay outside the launch slice.
+              O MVP continua intencionalmente enxuto: membros, clientes, lancamentos, historico de revisoes e relatorios. Billing e multi-site ficam fora do primeiro corte.
             </p>
           </div>
           <div className="grid gap-3">
             {[
-              "Invite the first manager and operator seats.",
-              "Configure approval contact details in settings.",
-              "Load clients before opening productive event capture."
+              "Convide os primeiros gestores e operadores.",
+              "Configure o contato de aprovacao em configuracoes.",
+              "Cadastre clientes antes de abrir eventos produtivos."
             ].map((item) => (
               <div className="rounded-3xl border border-ink-900/10 bg-sand-50/70 px-4 py-3 text-sm text-ink-800" key={item}>
                 {item}

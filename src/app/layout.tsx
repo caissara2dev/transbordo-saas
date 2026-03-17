@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { DM_Sans, IBM_Plex_Sans_Condensed } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "@/app/globals.css";
 
-const display = IBM_Plex_Sans_Condensed({
+const display = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-display"
 });
 
-const body = DM_Sans({
+const body = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-body"
 });
 
 export const metadata: Metadata = {
   title: "Transbordo Cloud",
-  description: "Industrial operations SaaS for governed event tracking and shift intelligence."
+  description: "Centro de comando operacional para transbordo industrial."
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
