@@ -17,8 +17,7 @@ import {
   canConfigureWorkspace,
   canManageWorkspace,
   canViewReports,
-  organizationRoleLabels,
-  platformRoleLabels
+  organizationRoleLabels
 } from "@/lib/auth/permissions";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -99,6 +98,7 @@ export function AppShell({
   children: ReactNode;
 }) {
   const role = viewer.activeMembership.role;
+  const isDashboard = currentPath === "/dashboard";
   const primaryItems = primaryNavItems.filter((item) => item.visible(role));
   const utilityItems = utilityNavItems.filter((item) => item.visible(role));
   const displayName = viewer.profile.fullName || viewer.profile.email;
@@ -120,18 +120,19 @@ export function AppShell({
       <header className="sticky top-0 z-40 border-b border-black/10 bg-white/90 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <Link className="flex items-center gap-3" href="/">
+            <div className="flex min-w-0 items-center gap-4">
+              <Link className="flex min-w-0 shrink-0 items-center gap-3" href="/">
                 <div className="flex h-10 w-10 items-center justify-center rounded bg-ember-500">
                   <span className="font-display text-sm font-bold text-white">TC</span>
                 </div>
-                <div>
-                  <p className="font-body text-[10px] uppercase tracking-[0.32em] text-ink-500">Transbordo Cloud</p>
-                  <p className="font-display text-lg leading-none text-ink-950">Workspace operacional</p>
+                <div className="min-w-0">
+                  <p className="truncate font-body text-[10px] uppercase tracking-[0.32em] text-ink-500">Transbordo Cloud</p>
+                  <p className="truncate font-display text-[17px] leading-none text-ink-950">Controle Transbordo</p>
                 </div>
               </Link>
 
-              <nav className="hidden items-center gap-2 xl:flex">
+              {!isDashboard ? (
+                <nav className="hidden items-center gap-2 xl:flex">
                 {primaryItems.map((item) => {
                   const Icon = item.icon;
                   const active = isActivePath(currentPath, item.href);
@@ -152,15 +153,14 @@ export function AppShell({
                     </Link>
                   );
                 })}
-              </nav>
+                </nav>
+              ) : null}
             </div>
 
-            <div className="hidden items-center gap-3 md:flex">
-              <div className="rounded-lg border border-black/10 bg-white px-4 py-2 text-right shadow-sm">
-                <p className="text-sm font-semibold text-ink-950">{displayName}</p>
-                <p className="text-xs text-ink-500">
-                  {organizationRoleLabels[role]} · {platformRoleLabels[viewer.profile.platformRole]}
-                </p>
+            <div className="hidden shrink-0 items-center gap-3 md:flex">
+              <div className="max-w-[220px] rounded-lg border border-black/10 bg-white px-3 py-2 text-right shadow-sm">
+                <p className="truncate text-sm font-semibold text-ink-950">{displayName}</p>
+                <p className="truncate text-[11px] text-ink-500">{organizationRoleLabels[role]}</p>
               </div>
 
               {utilityItems.length > 0 ? (
@@ -217,29 +217,31 @@ export function AppShell({
                   <p className="mt-1 text-sm text-ink-600">{organizationRoleLabels[role]}</p>
                 </div>
 
-                <div className="mt-4">
-                  <p className="mb-2 px-1 text-[10px] uppercase tracking-[0.3em] text-ink-500">Principal</p>
-                  <div className="space-y-1">
-                    {primaryItems.map((item) => {
-                      const Icon = item.icon;
-                      const active = isActivePath(currentPath, item.href);
+                {!isDashboard ? (
+                  <div className="mt-4">
+                    <p className="mb-2 px-1 text-[10px] uppercase tracking-[0.3em] text-ink-500">Principal</p>
+                    <div className="space-y-1">
+                      {primaryItems.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActivePath(currentPath, item.href);
 
-                      return (
-                        <Link
-                          className={cn(
-                            "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition",
-                            active ? "bg-ember-500 text-white" : "text-ink-700 hover:bg-sand-50"
-                          )}
-                          href={item.href as never}
-                          key={item.href}
-                        >
-                          <Icon className="h-4 w-4" />
-                          {item.label}
-                        </Link>
-                      );
-                    })}
+                        return (
+                          <Link
+                            className={cn(
+                              "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition",
+                              active ? "bg-ember-500 text-white" : "text-ink-700 hover:bg-sand-50"
+                            )}
+                            href={item.href as never}
+                            key={item.href}
+                          >
+                            <Icon className="h-4 w-4" />
+                            {item.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
                 {utilityItems.length > 0 ? (
                   <div className="mt-4">
@@ -277,30 +279,32 @@ export function AppShell({
             </details>
           </div>
 
-          <div className="hidden overflow-x-auto pb-4 md:flex xl:hidden">
-            <nav className="flex items-center gap-2">
-              {primaryItems.map((item) => {
-                const Icon = item.icon;
-                const active = isActivePath(currentPath, item.href);
+          {!isDashboard ? (
+            <div className="hidden overflow-x-auto pb-4 md:flex xl:hidden">
+              <nav className="flex items-center gap-2">
+                {primaryItems.map((item) => {
+                  const Icon = item.icon;
+                  const active = isActivePath(currentPath, item.href);
 
-                return (
-                  <Link
-                    className={cn(
-                      "inline-flex whitespace-nowrap items-center gap-2 rounded-lg border px-4 py-2 text-sm transition",
-                      active
-                        ? "border-ember-500 bg-ember-500 text-white shadow-sm"
-                        : "border-transparent text-ink-600 hover:border-black/10 hover:bg-sand-50 hover:text-ink-950"
-                    )}
-                    href={item.href as never}
-                    key={item.href}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
+                  return (
+                    <Link
+                      className={cn(
+                        "inline-flex whitespace-nowrap items-center gap-2 rounded-lg border px-4 py-2 text-sm transition",
+                        active
+                          ? "border-ember-500 bg-ember-500 text-white shadow-sm"
+                          : "border-transparent text-ink-600 hover:border-black/10 hover:bg-sand-50 hover:text-ink-950"
+                      )}
+                      href={item.href as never}
+                      key={item.href}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          ) : null}
         </div>
       </header>
 
